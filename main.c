@@ -173,7 +173,7 @@ int main(){
     
     int scapacity = 100;
     int sinstances = 0;
-    int wcapacity = 1000;
+    int wcapacity = 100;
     int winstances = 0;
     int cinstances = 0;
     int ccapacity = 100;
@@ -222,6 +222,7 @@ int main(){
         if(IsKeyDown(KEY_A)){
             createConcrete(&cinstances, &ccapacity, &concrete, mat);
         }
+
         moveSand(&sinstances, &sand, mat);
         moveWater(&winstances, &water, mat);
 
@@ -231,26 +232,25 @@ for (int y = 0; y < H - 1; y++)
     {
         if (mat[y][x] == 1)
         {
-            pixels[y * W + x] = randomSandColor();  // ← Mudou de H para W
+            pixels[y * W + x] = randomSandColor();
         }
         else if (mat[y][x] == 0)
         {
-            pixels[y * W + x] = BLACK;              // ← Mudou de H para W
+            pixels[y * W + x] = BLACK;
         } 
         else if (mat[y][x] == 2)
         {
-            pixels[y * W + x] = DARKBLUE;           // ← Mudou de H para W
+            pixels[y * W + x] = DARKBLUE;  
         }
         else if (mat[y][x] == 3)
         {
-            pixels[y * W + x] = GRAY;               // ← Mudou de H para W
+            pixels[y * W + x] = GRAY;               
         }
     }
 }
         UpdateTexture(tex, pixels);
 
         BeginDrawing();
-            
             ClearBackground(BLACK);
             DrawTexture(tex, 0, 0, WHITE);
             DrawFPS(10, 10);
