@@ -171,92 +171,105 @@ void moveSand(int *instances, struct Sand **sand, int **mat){
 
 int main(){
     
-    int scapacity = 100;
-    int sinstances = 0;
-    int wcapacity = 100;
-    int winstances = 0;
-    int cinstances = 0;
-    int ccapacity = 100;
-    Vector2 mouse;
+    int scapacity = 100;    //Sand capacity
+    int sinstances = 0;     //Sand instances
+
+    int wcapacity = 100;    // Water instances  
+    int winstances = 0;     // Water capacity
+
+    int cinstances = 0;     // Concrete instances
+    int ccapacity = 100;    // Concrete capacity
+
+
+
+    Texture2D tex; // Using a iimage and texture to display game graphics
     Image img = GenImageColor(W, H, BLACK);
-    Texture2D tex;
     Color *pixels;
     pixels = LoadImageColors(img);
-    int **mat;
+    tex = LoadTextureFromImage(img);
+
+
+
     struct Sand *sand;
     struct Water *water;
     struct Concrete *concrete;
 
+    // Allocation of structures that represents materials
     sand = malloc(scapacity * sizeof(struct Sand));
     water = malloc(wcapacity * sizeof(struct Water));
     concrete = malloc(wcapacity * sizeof(struct Water));
+
+    int **mat;      // Allocation of matrix that used for colisions
     mat = malloc(H* sizeof(int*));
     for(int i = 0; i<H; i++){
         mat[i] = malloc(W*sizeof(int));
     }
-
     for(int i = 0; i<H; i++){
         for(int j = 0; j<W; j++){
            mat[i][j] = 0;
        }
     }
     
-    SetTargetFPS(240);
-    InitWindow(W, H, "MaterialBox");
-    //sprite = LoadTexture("sprite.png");
-    tex = LoadTextureFromImage(img);
+    SetTargetFPS(240); // Setting target FPS
+    InitWindow(W, H, "MaterialBox"); //Init game window with height and width H,
 
     while (!WindowShouldClose())  //gameloop
     {
-        mouse.x = GetMouseX();
-        mouse.y = GetMouseY();
         
+        // Reading inputs and creating materials
         if(IsMouseButtonDown(0)){
             createSand(&sinstances, &scapacity, &sand, mat);
         }
+
         if(IsMouseButtonDown(1)){
             createWater(&winstances, &wcapacity, &water, mat);
             createWater(&winstances, &wcapacity, &water, mat);
             createWater(&winstances, &wcapacity, &water, mat);
         }
+
         if(IsKeyDown(KEY_A)){
             createConcrete(&cinstances, &ccapacity, &concrete, mat);
         }
 
+        // Updating the game phisics
         moveSand(&sinstances, &sand, mat);
         moveWater(&winstances, &water, mat);
 
-for (int y = 0; y < H - 1; y++)
-{
-    for (int x = 0; x < W - 1; x++)
-    {
-        if (mat[y][x] == 1)
+
+        // Setting pixels on texture to display game graphics
+        for (int y = 0; y < H - 1; y++)
         {
-            pixels[y * W + x] = randomSandColor();
+            for (int x = 0; x < W - 1; x++)
+            {
+                if (mat[y][x] == 1)
+                {
+                    pixels[y * W + x] = randomSandColor();
+                }
+                else if (mat[y][x] == 0)
+                {
+                    pixels[y * W + x] = BLACK;
+                } 
+                else if (mat[y][x] == 2)
+                {
+                    pixels[y * W + x] = DARKBLUE;  
+                }
+                else if (mat[y][x] == 3)
+                {
+                    pixels[y * W + x] = GRAY;               
+                }
+            }
         }
-        else if (mat[y][x] == 0)
-        {
-            pixels[y * W + x] = BLACK;
-        } 
-        else if (mat[y][x] == 2)
-        {
-            pixels[y * W + x] = DARKBLUE;  
-        }
-        else if (mat[y][x] == 3)
-        {
-            pixels[y * W + x] = GRAY;               
-        }
-    }
-}
         UpdateTexture(tex, pixels);
 
         BeginDrawing();
             ClearBackground(BLACK);
-            DrawTexture(tex, 0, 0, WHITE);
+            DrawTexture(tex, 0, 0, WHITE); // Drawing the game graphics
             DrawFPS(10, 10);
         EndDrawing();
     }
     
+
+    // Free allocated memory
     for(int i = 0; i<W; i++){
         free(mat[i]);
     }
