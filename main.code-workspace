@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"raylib.h": "c",
+			"math.h": "c",
+			"blocks.h": "c",
+			"stdio.h": "c",
+			"*.m": "c"
+		},
+		"godotTools.editorPath.godot4": "C:\\Program Files\\Godot\\Godot_v4.5.1-stable_win64.exe"
+	}
+}
