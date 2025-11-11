@@ -1,5 +1,6 @@
 #include "raylib.h"
 #include <stdlib.h>
+#include <stdio.h>
 #define W 800
 #define H 600
 
@@ -35,6 +36,10 @@ void createSand(int *ins, int *cap, struct Sand **sand, int **mat){
             (*cap) *= 2;
             *sand = realloc(*sand,(*cap)*sizeof(struct Sand));
         }
+        if(*sand == NULL){
+            printf("ERROR: Insuficient memory");
+        }
+
         (*sand)[*ins-1].pos.x = GetMouseX();
         (*sand)[*ins-1].pos.y = GetMouseY();
         (*sand)[*ins-1].color = randomSandColor();
@@ -48,6 +53,10 @@ void createConcrete(int *ins, int *cap, struct Concrete **concrete, int **mat){
             (*cap) *= 2;
             *concrete = realloc(*concrete,(*cap)*sizeof(struct Concrete));
         }
+        if(*concrete == NULL){
+            printf("ERROR: Insuficient memory");
+        }
+
         (*concrete)[*ins-1].pos.x = GetMouseX();
         (*concrete)[*ins-1].pos.y = GetMouseY();
         mat[GetMouseY()][GetMouseX()] = 3;
@@ -76,6 +85,10 @@ void createWater(int *ins, int *cap, struct Water **water, int **mat){
             (*cap) *= 2;
             *water = realloc(*water,(*cap)*sizeof(struct Sand));
         }
+        if(*water == NULL){
+            printf("ERROR: Insuficient memory");
+        }
+
         (*water)[*ins-1].pos.x = GetMouseX();
         (*water)[*ins-1].pos.y = GetMouseY();
         (*water)[*ins-1].color = randomSandColor();
@@ -181,13 +194,10 @@ int main(){
     int ccapacity = 100;    // Concrete capacity
 
 
-
     Texture2D tex; // Using a iimage and texture to display game graphics
     Image img = GenImageColor(W, H, BLACK);
     Color *pixels;
     pixels = LoadImageColors(img);
-    tex = LoadTextureFromImage(img);
-
 
 
     struct Sand *sand;
@@ -212,7 +222,7 @@ int main(){
     
     SetTargetFPS(240); // Setting target FPS
     InitWindow(W, H, "MaterialBox"); //Init game window with height and width H,
-
+    tex = LoadTextureFromImage(img);
     while (!WindowShouldClose())  //gameloop
     {
         
