@@ -88,7 +88,6 @@ void createWater(int *ins, int *cap, struct Water **water, int **mat) {
 
     (*water)[*ins].pos.x = GetMouseX();
     (*water)[*ins].pos.y = GetMouseY();
-    (*water)[*ins].color = randomSandColor();
     mat[GetMouseY()][GetMouseX()] = 2;
 
     (*ins)++;
@@ -134,8 +133,8 @@ void moveWater(int *instances, struct Water **water, int **mat) {
 
 void moveFire(int *instances, int *capacity, struct Fire **fire, int **mat) {
     int inst = (*instances);
-    int burnchance = GetRandomValue(1, 12);
-    for (int i = 0; i < inst; i++) {
+    int burnchance = GetRandomValue(1, 4);
+    for (int i = 0; i <= inst; i++) {
         int x = (int)(*fire)[i].pos.x;
         int y = (int)(*fire)[i].pos.y;
         if (y > 0 && y < H - 1) {
@@ -149,10 +148,42 @@ void moveFire(int *instances, int *capacity, struct Fire **fire, int **mat) {
                 if ((mat[y][x - 1] == 4) && burnchance == 4)
                     createFire(instances, capacity, fire, mat, x - 1, y);
             }
-            if ((mat[y + 1][x] != 4) && (mat[y - 1][x] != 4) && (mat[y][x - 1] != 4) && (mat[y][x + 1] != 4)) {
+
+            if (((mat[y + 2][x] == 4) || (mat[y - 2][x] == 4) || (mat[y][x - 2] == 4) || (mat[y][x + 2] == 4)) && (*fire)[i].atv) {
+                if ((mat[y + 2][x] == 4) && burnchance == 1)
+                    createFire(instances, capacity, fire, mat, x, y + 1);
+                if ((mat[y - 2][x] == 4) && burnchance == 2)
+                    createFire(instances, capacity, fire, mat, x, y - 1);
+                if ((mat[y][x + 2] == 4) && burnchance == 3)
+                    createFire(instances, capacity, fire, mat, x + 1, y);
+                if ((mat[y][x - 2] == 4) && burnchance == 4)
+                    createFire(instances, capacity, fire, mat, x - 1, y);
+            }
+
+            if (((mat[y + 1][x + 1] == 4) || (mat[y - 1][x -1] == 4) || (mat[y + 1][x - 1] == 4) || (mat[y - 1][x + 1] == 4)) && (*fire)[i].atv) {
+                if ((mat[y + 1][x + 1] == 4) && burnchance == 1)
+                    createFire(instances, capacity, fire, mat, x + 1, y + 1);
+                if ((mat[y - 1][x - 1] == 4) && burnchance == 2)
+                    createFire(instances, capacity, fire, mat, x - 1, y - 1);
+                if ((mat[y + 1][x - 1] == 4) && burnchance == 3)
+                    createFire(instances, capacity, fire, mat, x + 1, y  - 1);
+                if ((mat[y - 1][x + 1] == 4) && burnchance == 4)
+                    createFire(instances, capacity, fire, mat, x - 1, y + 1);
+            }
+
+            if ((mat[y + 1][x] != 4) && (mat[y - 1][x] != 4) && (mat[y][x - 1] != 4) && (mat[y][x + 1] != 4) && (*fire)[i].atv == true){
                 mat[y][x] = 0;
                 (*fire)[i].atv = false;
             }
+
+            // if ((mat[y + 1][x] != 4) && (mat[y - 1][x] != 4) && (mat[y][x - 1] != 4) && (mat[y][x + 1] != 4)) {
+            //     mat[y][x] = 0;
+            //     (*fire)[i].atv = false;
+            // } else if ((mat[y + 1][x + 1] != 4) && (mat[y - 1][x  - 1] != 4) && (mat[y + 1][x - 1] != 4) && (mat[y - 1][x + 1] != 4)) {
+            //     mat[y][x] = 0;
+            // } else if ((mat[y + 2][x] != 4) && (mat[y - 2][x] != 4) && (mat[y][x - 2] != 4) && (mat[y][x + 2] != 4)) {
+            //     mat[y][x] = 0;
+            // }
         }
     }
 }

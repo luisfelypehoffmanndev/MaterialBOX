@@ -11,13 +11,11 @@ struct Sand {
 
 struct Water {
     Vector2 pos;
-    Color color;
 };
 
 struct Fire {
     Vector2 pos;
     bool atv;
-    int life;
 };
 
 struct Concrete {
